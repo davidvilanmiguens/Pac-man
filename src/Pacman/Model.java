@@ -108,6 +108,22 @@ public class Model extends JPanel implements ActionListener {
             }
 
         }
+
+
+
+
+        public void movePacman(){
+
+        int pos;
+        short ch;
+
+        if (pacman_x % BLOCK_SIZE == 0 && pacman_y % BLOCK_SIZE == 0){
+            pos = pacman_x /
+        }
+
+        }
+
+
         private void continueLevel(){
             int dx = 1;
             int random;
@@ -177,14 +193,6 @@ public class Model extends JPanel implements ActionListener {
             }
         }
     }
-
-
-
-
-
-
-
-
 
 
 

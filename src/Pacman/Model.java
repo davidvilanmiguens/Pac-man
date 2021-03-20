@@ -142,6 +142,9 @@ public class Model extends JPanel implements ActionListener {
 
 
 
+
+
+
     //controles
     class TAdapter extends KeyAdapter {
 

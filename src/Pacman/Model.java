@@ -178,6 +178,34 @@ public class Model extends JPanel implements ActionListener {
         }
     }
 
+    private void playGame(Graphics2D g2d) {
+
+        if (dying) {
+
+            death();
+
+        } else {
+
+            movePacman();
+            drawPacman(g2d);
+            moveGhosts(g2d);
+            checkMaze();
+        }
+    }
+
+    private void drawGhost(Graphics2D g2d, int x, int y) {
+        g2d.drawImage(ghost, x, y, this);
+    }
+    private void death() {
+
+        lives--;
+
+        if (lives == 0) {
+            inGame = false;
+        }
+
+        continueLevel();
+    }
     private void movePacman() {
 
         int pos;
@@ -215,6 +243,133 @@ public class Model extends JPanel implements ActionListener {
         pacman_y = pacman_y + PACMAN_SPEED * pacmand_y;
     }
 
+    private void drawPacman(Graphics2D g2d) {
+
+        if (req_dx == -1) {
+            g2d.drawImage(left, pacman_x + 1, pacman_y + 1, this);
+        } else if (req_dx == 1) {
+            g2d.drawImage(right, pacman_x + 1, pacman_y + 1, this);
+        } else if (req_dy == -1) {
+            g2d.drawImage(up, pacman_x + 1, pacman_y + 1, this);
+        } else {
+            g2d.drawImage(down, pacman_x + 1, pacman_y + 1, this);
+        }
+    }
+
+    private void drawMaze(Graphics2D g2d) {
+
+        short i = 0;
+        int x, y;
+
+        for (y = 0; y < SCREEN_SIZE; y += BLOCK_SIZE) {
+            for (x = 0; x < SCREEN_SIZE; x += BLOCK_SIZE) {
+
+                g2d.setColor(new Color(0,72,251));
+                g2d.setStroke(new BasicStroke(5));
+
+                if ((levelData[i] == 0)) {
+                    g2d.fillRect(x, y, BLOCK_SIZE, BLOCK_SIZE);
+                }
+
+                if ((screenData[i] & 1) != 0) {
+                    g2d.drawLine(x, y, x, y + BLOCK_SIZE - 1);
+                }
+
+                if ((screenData[i] & 2) != 0) {
+                    g2d.drawLine(x, y, x + BLOCK_SIZE - 1, y);
+                }
+
+                if ((screenData[i] & 4) != 0) {
+                    g2d.drawLine(x + BLOCK_SIZE - 1, y, x + BLOCK_SIZE - 1,
+                            y + BLOCK_SIZE - 1);
+                }
+
+                if ((screenData[i] & 8) != 0) {
+                    g2d.drawLine(x, y + BLOCK_SIZE - 1, x + BLOCK_SIZE - 1,
+                            y + BLOCK_SIZE - 1);
+                }
+
+                if ((screenData[i] & 16) != 0) {
+                    g2d.setColor(new Color(255,255,255));
+                    g2d.fillOval(x + 10, y + 10, 6, 6);
+                }
+
+                i++;
+            }
+        }
+    }
+
+    private void moveGhosts(Graphics2D g2d) {
+
+        int pos;
+        int count;
+
+        for (int i = 0; i < N_GHOSTS; i++) {
+            if (ghost_x[i] % BLOCK_SIZE == 0 && ghost_y[i] % BLOCK_SIZE == 0) {
+                pos = ghost_x[i] / BLOCK_SIZE + N_BLOCKS * (int) (ghost_y[i] / BLOCK_SIZE);
+
+                count = 0;
+
+                if ((screenData[pos] & 1) == 0 && ghost_dx[i] != 1) {
+                    dx[count] = -1;
+                    dy[count] = 0;
+                    count++;
+                }
+
+                if ((screenData[pos] & 2) == 0 && ghost_dy[i] != 1) {
+                    dx[count] = 0;
+                    dy[count] = -1;
+                    count++;
+                }
+
+                if ((screenData[pos] & 4) == 0 && ghost_dx[i] != -1) {
+                    dx[count] = 1;
+                    dy[count] = 0;
+                    count++;
+                }
+
+                if ((screenData[pos] & 8) == 0 && ghost_dy[i] != -1) {
+                    dx[count] = 0;
+                    dy[count] = 1;
+                    count++;
+                }
+
+                if (count == 0) {
+
+                    if ((screenData[pos] & 15) == 15) {
+                        ghost_dx[i] = 0;
+                        ghost_dy[i] = 0;
+                    } else {
+                        ghost_dx[i] = -ghost_dx[i];
+                        ghost_dy[i] = -ghost_dy[i];
+                    }
+
+                } else {
+
+                    count = (int) (Math.random() * count);
+
+                    if (count > 3) {
+                        count = 3;
+                    }
+
+                    ghost_dx[i] = dx[count];
+                    ghost_dy[i] = dy[count];
+                }
+
+            }
+
+            ghost_x[i] = ghost_x[i] + (ghost_dx[i] * ghostSpeed[i]);
+            ghost_y[i] = ghost_y[i] + (ghost_dy[i] * ghostSpeed[i]);
+            drawGhost(g2d, ghost_x[i] + 1, ghost_y[i] + 1);
+
+            if (pacman_x > (ghost_x[i] - 12) && pacman_x < (ghost_x[i] + 12)
+                    && pacman_y > (ghost_y[i] - 12) && pacman_y < (ghost_y[i] + 12)
+                    && inGame) {
+
+                dying = true;
+            }
+        }
+    }
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
 

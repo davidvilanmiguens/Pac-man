@@ -168,6 +168,10 @@ public class Model extends JPanel implements ActionListener {
         continueLevel();
     }
 
+    /**
+     * movimiento fantasmas
+     * @param g2d
+     */
     private void moveGhosts(Graphics2D g2d) {
 
         int pos;
@@ -244,6 +248,9 @@ public class Model extends JPanel implements ActionListener {
         g2d.drawImage(ghost, x, y, this);
     }
 
+    /**
+     * movimiento pacman
+     */
     private void movePacman() {
 
         int pos;
@@ -411,7 +418,9 @@ public class Model extends JPanel implements ActionListener {
     }
 
 
-    //controls
+    /**
+     * controles
+     */
     class TAdapter extends KeyAdapter {
 
         @Override

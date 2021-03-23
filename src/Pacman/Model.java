@@ -111,7 +111,7 @@ public class Model extends JPanel implements ActionListener {
 
     private void showIntroScreen(Graphics2D g2d) {
 
-        String start = "Press SPACE to start";
+        String start = "Pulsa ESPACIO para empezar";
         g2d.setColor(Color.yellow);
         g2d.drawString(start, (SCREEN_SIZE)/4, 150);
     }
@@ -119,7 +119,7 @@ public class Model extends JPanel implements ActionListener {
     private void drawScore(Graphics2D g) {
         g.setFont(smallFont);
         g.setColor(new Color(5, 181, 79));
-        String s = "Score: " + score;
+        String s = "Puntuacion: " + score;
         g.drawString(s, SCREEN_SIZE / 2 + 96, SCREEN_SIZE + 16);
 
         for (int i = 0; i < lives; i++) {

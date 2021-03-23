@@ -386,11 +386,11 @@ public class Model extends JPanel implements ActionListener {
             ghostSpeed[i] = validSpeeds[random];
         }
 
-        pacman_x = 7 * BLOCK_SIZE;  //start position
+        pacman_x = 7 * BLOCK_SIZE;  //empieza en un lugar
         pacman_y = 11 * BLOCK_SIZE;
-        pacmand_x = 0;	//reset direction move
+        pacmand_x = 0;	//reiniciar la direccion
         pacmand_y = 0;
-        req_dx = 0;		// reset direction controls
+        req_dx = 0;		//reiniciar los controles
         req_dy = 0;
         dying = false;
     }
